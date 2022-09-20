@@ -19,7 +19,7 @@ def main():
 	        ret, frame = cap.read()
 	        if not ret:
 	            break
-	        cv2_im = frame
+	        cv2_im = frame[320:720,250:1750]
 
 	        #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
 	        cv2_im = cv2.resize(cv2_im, (640,640))
