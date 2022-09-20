@@ -54,6 +54,7 @@ def main():
     case_interpreter.allocate_tensors()
     case_labels = read_label_file(args.case_labels)
     case_inference_size = input_size(case_interpreter)
+    logger = open("logger.txt", 'w')
 
     cap = cv2.VideoCapture(cam_id)
     tracker = Sort()
@@ -70,7 +71,11 @@ def main():
         if objs:
             # x1,y1,x2,y2, score
             buf_list = []
+            logger.write("Frame")
+            logger.write("\n")
             for i in objs:
+                logger.write(i)
+                logger.write('\n')
                 if i[0] in filtered:    
                     ll = list(i[2])
                     ll.append(i[1])
@@ -87,8 +92,9 @@ def main():
         cv2_im = append_objs_to_img(cv2_im, inference_size, treks, labels)
         cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            logger.close()
             break
-
+    logger.close()
     cap.release()
     cv2.destroyAllWindows()
 
