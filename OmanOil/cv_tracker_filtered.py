@@ -54,10 +54,10 @@ def main():
     case_interpreter.allocate_tensors()
     case_labels = read_label_file(args.case_labels)
     case_inference_size = input_size(case_interpreter)
-    logger = open("logger.txt", 'w')
+    logger = open("logger_sort_latency.txt", 'w')
 
     cap = cv2.VideoCapture(cam_id)
-    tracker = Sort()
+    tracker = Sort(35, 50)
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
