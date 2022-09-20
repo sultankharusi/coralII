@@ -74,7 +74,7 @@ def main():
             logger.write("Frame")
             logger.write("\n")
             for i in objs:
-                logger.write(i)
+                logger.write(str(i))
                 logger.write('\n')
                 if i[0] in filtered:    
                     ll = list(i[2])
