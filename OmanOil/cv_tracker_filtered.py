@@ -28,7 +28,7 @@ def main():
     parser.add_argument('--top_k', type=int, default=3,
                         help='number of categories with highest score to display')
     parser.add_argument('--camera_idx', help='Index of which video source to use. ', default = "1") # camera id 1 is because no 0 in the dev borad
-    parser.add_argument('--threshold', type=float, default=0.6,
+    parser.add_argument('--threshold', type=float, default=0.4,
                         help='classifier score threshold')
 
     args = parser.parse_args()
@@ -62,7 +62,7 @@ def main():
         ret, frame = cap.read()
         if not ret:
             break
-        cv2_im = frame
+        cv2_im = frame[320:720, 265:1650]
 
         cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
