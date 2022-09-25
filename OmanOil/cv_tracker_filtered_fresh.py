@@ -147,7 +147,7 @@ def main():
         #cv.imwrite(f"frames/{frmz}.jpg", cv2_im)
         frmz += 1
         #cv2_im_rgb = cv.cvtColor(cv2_im, cv.COLOR_BGR2RGB)
-        cv2_im_rgb = cv.resize(cv2_im_rgb, inference_size)
+        cv2_im_rgb = cv.resize(cv2_im, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, args.threshold)[:args.top_k]
         if objs:
