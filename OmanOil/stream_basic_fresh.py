@@ -94,18 +94,18 @@ class FreshestFrame(threading.Thread):
 def main():
     frmz = 0
     cap = cv.VideoCapture(cam_id)
-    cap.set(cv.CAP_PROP_FPS, 16)
+    cap.set(cv.CAP_PROP_FPS, 35)
     cap = FreshestFrame(cap)
     ret = 0
     while True:
         ret, frame = cap.read(seqnumber=ret+1)
         if not ret:
             break
-        cv2_im = frame[320:720, 265:1650]
+        cv2_im = frame#[320:720, 265:1650]
         #cv2.imwrite(f"frames/{frmz}.jpg", cv2_im)
         frmz += 1
         #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-        #cv2_im = cv.resize(cv2_im, (640, 640))
+        cv2_im = cv.resize(cv2_im, (640, 640))
         #run_inference(interpreter, cv2_im_rgb.tobytes())
         #objs = get_objects(interpreter, args.threshold)[:args.top_k]
         cv.imshow('frame', cv2_im)
