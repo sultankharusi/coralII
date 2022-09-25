@@ -94,7 +94,7 @@ class FreshestFrame(threading.Thread):
 def main():
     frmz = 0
     cap = cv.VideoCapture(cam_id)
-    cap.set(cv.CAP_PROP_FPS, 25)
+    cap.set(cv.CAP_PROP_FPS, 16)
     cap = FreshestFrame(cap)
     ret = 0
     while True:
