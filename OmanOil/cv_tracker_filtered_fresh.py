@@ -144,10 +144,10 @@ def main():
         if not ret:
             break
         cv2_im = frame#[320:720, 265:1650]
-        #cv2.imwrite(f"frames/{frmz}.jpg", cv2_im)
+        #cv.imwrite(f"frames/{frmz}.jpg", cv2_im)
         frmz += 1
-        #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-        cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
+        #cv2_im_rgb = cv.cvtColor(cv2_im, cv.COLOR_BGR2RGB)
+        cv2_im_rgb = cv.resize(cv2_im_rgb, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, args.threshold)[:args.top_k]
         if objs:
@@ -181,9 +181,9 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels):
     for obj in objs:
         x0, y0, x1, y1 = int(scale_x*obj[0]), int(scale_y*obj[1]), int(scale_x*obj[2]), int(scale_y*obj[3])
 
-        cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
-        cv2_im = cv2.putText(cv2_im, str(obj[4]), (x0, y0+30),
-                             cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+        cv2_im = cv.rectangle(cv2_im, (x0, y0), (x1, y1), (0, 255, 0), 2)
+        cv2_im = cv.putText(cv2_im, str(obj[4]), (x0, y0+30),
+                             cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
     return cv2_im
 
 if __name__ == "__main__":
