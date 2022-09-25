@@ -40,6 +40,8 @@ cam_id = args.camera_idx
 if cam_id.isnumeric():
     cam_id = int(cam_id)
 
+with open(default_stream_labels , 'r') as f:
+        clsz = [i.strip('\n') for i in f.readlines()]
 classes_of_interest = ['Vehicle',"Plate"]
 filtered = [clsz.index(i) for i in classes_of_interest]
 
