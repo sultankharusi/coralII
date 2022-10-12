@@ -217,7 +217,8 @@ def main():
     
     classes_of_interest = ['Vehicle']
     filtered = [clsz.index(i) for i in classes_of_interest]
-
+    tracks_status = FixSizeOrderedDict(max=4)
+    print(tracks_status)
     print('Loading {} with {} labels.'.format(args.model, args.labels))
     interpreter = make_interpreter(args.model)
     interpreter.allocate_tensors()
@@ -231,7 +232,7 @@ def main():
     cap = FreshestFrame(cap)
     ret = 0
     tracker = Sort()
-    tracks_status = FixSizeOrderedDict(max=4)
+    
     emptyslot = dict({ k:None for k in ('box','score','plate','intime','scync','out_time')})
     while True:
         ret, frame = cap.read(seqnumber=ret+1)
