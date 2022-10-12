@@ -104,7 +104,7 @@ case_inference_size = input_size(case_interpreter)
 def plate_inference(plate,yscale=1.22,xscale=0.36):
     y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = cv2_im_cropped[int(plate[1]):int(plate[3]),int(plate[0]):int(plate[2])]
-    frame = cv.resize(square_plates(frame), case_inference_size)
+    frame = cv2.resize(square_plates(frame), case_inference_size)
     run_inference(case_interpreter, frame.tobytes())
     objs = get_objects(case_interpreter, 0.6)[:6]
     if objs:
@@ -227,7 +227,7 @@ def main():
     
 
     cap = cv2.VideoCapture(cam_id)
-    cap.set(cv.CAP_PROP_FPS, 35)
+    cap.set(cv2.CAP_PROP_FPS, 35)
     cap = FreshestFrame(cap)
     ret = 0
     tracker = Sort()
