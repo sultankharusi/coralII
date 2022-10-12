@@ -60,7 +60,7 @@ def box_centeres_match(plate_centers, vehicle_box):
         for i in keys_:
             if not vehicle_box[i]['plate']:
                 box = vehicle_box[i]['box']
-                print(box)
+                #print(box)
                 if is_inside(center, box):
                     plate = plate_inference(plate_centers[center[:4]]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
                     if plate:
@@ -253,14 +253,14 @@ def main():
             for i in objs:
                 if i[0] in filtered:    
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
-                    print("Car center,", i[2])
+                    #print("Car center,", i[2])
                     ll.append(i[1]) # Append the score
                     buf_list.append(ll) # Append as a whole list
                 else:
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     ll.append(i[1]) # Append the score
                     plate_list[get_center(i[2])] = ll # Append as a whole list with the center being the key
-                    print("Plate Center! ", get_center(i[2]))
+                    #print("Plate Center! ", get_center(i[2]))
                     
             np_array = np.array(buf_list) # x1,y1,x2,y2, score
             if buf_list:
@@ -281,10 +281,10 @@ def main():
         #print(tracks_status, "4")
         for i in treks:
             if i[4] not in tracks_status.keys():
-                tracks_status[i[4]] = dict({'box':i[:3],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
+                tracks_status[i[4]] = dict({'box':i[:4],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
         #print(tracks_status, "5")
         if tracks_status and plate_list:
-            print("Matching centers!")
+            #print("Matching centers!")
             tracks_status = box_centeres_match(plate_list,tracks_status)
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
