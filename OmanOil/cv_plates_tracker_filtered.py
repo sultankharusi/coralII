@@ -252,7 +252,7 @@ def main():
             for i in objs:
                 if i[0] in filtered:    
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
-                    print("Car center," i[2])
+                    print("Car center,", i[2])
                     ll.append(i[1]) # Append the score
                     buf_list.append(ll) # Append as a whole list
                 else:
