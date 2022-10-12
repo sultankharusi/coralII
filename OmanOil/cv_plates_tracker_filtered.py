@@ -27,6 +27,7 @@ class FixSizeOrderedDict(OrderedDict):
         OrderedDict.__setitem__(self, key, value)
         if self._max > 0:
             if len(self) > self._max:
+                print("Popped! ")
                 self.popitem(False)
 
 def addObject(my_dictionary, id):
