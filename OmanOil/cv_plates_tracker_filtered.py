@@ -279,7 +279,7 @@ def main():
         if tracks_status:
             tracks_status = box_centeres_match(plate_list,tracks_status)
         
-        cv2_im = append_objs_to_img(cv2_im, inference_size, treks, labels)
+        cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
         cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
