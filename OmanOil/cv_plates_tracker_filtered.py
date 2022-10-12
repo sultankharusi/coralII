@@ -258,6 +258,7 @@ def main():
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     ll.append(i[1]) # Append the score
                     plate_list[get_center(i[2])] = ll # Append as a whole list with the center being the key
+                    print("Plate recognized! ")
                     
             np_array = np.array(buf_list) # x1,y1,x2,y2, score
             if buf_list:
