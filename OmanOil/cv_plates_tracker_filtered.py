@@ -10,12 +10,12 @@ import numpy as np
 from collections import OrderedDict
 import time
 
-#from pycoral.adapters.common import input_size
-#from pycoral.adapters.detect import get_objects
-#from pycoral.utils.dataset import read_label_file
-#from pycoral.utils.edgetpu import make_interpreter
-#from pycoral.utils.edgetpu import run_inference
-#from sort import *
+from pycoral.adapters.common import input_size
+from pycoral.adapters.detect import get_objects
+from pycoral.utils.dataset import read_label_file
+from pycoral.utils.edgetpu import make_interpreter
+from pycoral.utils.edgetpu import run_inference
+from sort import *
 
 
 class FixSizeOrderedDict(OrderedDict):
@@ -34,9 +34,13 @@ def addObject(my_dictionary, id):
         my_dictionary[id] = nor
         return my_dictionary
     
+
+import time 
 def get_time():
     t = time.localtime()
-    return time.strftime("%H:%M:%S", t)
+    return time.strftime("%D:%H:%M:%S", t)
+
+
 
 def is_inside(center, box):
     if center[0] > box[0] and center[0] < box[2] and center[1] < box[1]: # Check box positions
