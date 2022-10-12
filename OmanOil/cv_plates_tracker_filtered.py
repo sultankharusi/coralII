@@ -50,7 +50,7 @@ def is_inside(center, box):
         return False
 
 def sync_object(vehicles, index_):
-    print('sending info...', vehicles[index_])
+    print('sending info...', vehicles[index_]) # Update info
     vehicles[index_]['sync'] = True
     return vehicles
 
@@ -64,8 +64,8 @@ def box_centeres_match(plate_centers, vehicle_box):
                     plate = plate_inference(plate_centers[center[:4]]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
                     if plate:
                         vehicle_box[i]['plate'] = plate
-                        return sync_object(vehicle_box, i)
-            
+                        vehicle_box = sync_object(vehicle_box, i)
+    return vehicle_box
     
 def get_patch_from_src(file_name, orig, point):
     y_scale, x_scale = (400/320), (1500/320)
@@ -280,7 +280,7 @@ def main():
             if i[4] not in tracks_status.keys():
                 tracks_status[i[4]] = dict({'box':i[:3],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
         print(tracks_status, "5")
-        if tracks_status:
+        if tracks_status and plate_list:
             tracks_status = box_centeres_match(plate_list,tracks_status)
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
