@@ -233,7 +233,7 @@ def main():
     tracker = Sort()
     tracks_status = FixSizeOrderedDict(max=4)
     emptyslot = dict({ k:None for k in ('box','score','plate','intime','scync','out_time')})
-    while cap.isOpened():
+    while True:
         ret, frame = cap.read(seqnumber=ret+1)
         if not ret:
             break
