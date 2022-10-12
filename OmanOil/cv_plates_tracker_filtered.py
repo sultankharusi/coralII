@@ -269,22 +269,22 @@ def main():
         
         #print("Treks", treks)
         #print("objects", objs)
-        print(tracks_status, "2")
+        #print(tracks_status, "2")
         keys_ = list(tracks_status.keys())
-        print(tracks_status, "3")
+        #print(tracks_status, "3")
         for i in keys_:
             if i not in [l[4] for l in treks]:
                 tracks_status.pop(i) # Go through delete sequence ... Set end time and all
-        print(tracks_status, "4")
+        #print(tracks_status, "4")
         for i in treks:
             if i[4] not in tracks_status.keys():
                 tracks_status[i[4]] = dict({'box':i[:3],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
-        print(tracks_status, "5")
+        #print(tracks_status, "5")
         if tracks_status and plate_list:
             tracks_status = box_centeres_match(plate_list,tracks_status)
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
-        print(tracks_status, "6")
+        #print(tracks_status, "6")
         cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
