@@ -95,10 +95,10 @@ def get_center(box):
 
 case_model = "model_APNR_edgetpu.tflite"
 case_model_labels = "label_OCR.txt"
-print('Loading {} with {} labels.'.format(case_model, case_labels))
+print('Loading {} with {} labels.'.format(case_model, case_model_labels))
 case_interpreter = make_interpreter(case_model)
 case_interpreter.allocate_tensors()
-case_labels = read_label_file(case_labels)
+case_labels = read_label_file(case_model_labels)
 case_inference_size = input_size(case_interpreter)
 
 def plate_inference(plate,yscale=1.22,xscale=0.36):
