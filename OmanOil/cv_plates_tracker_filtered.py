@@ -44,7 +44,7 @@ def get_time():
 
 
 def is_inside(center, box):
-    if center[0] > box[0] and center[0] < box[2] and center[1] < box[1]: # Check box positions
+    if center[0] > box[0] and center[0] < box[2] and center[1] < box[3]: # Check box positions
         return True
     else:
         return False
@@ -283,6 +283,7 @@ def main():
                 tracks_status[i[4]] = dict({'box':i[:3],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
         #print(tracks_status, "5")
         if tracks_status and plate_list:
+            print("Matching centers!")
             tracks_status = box_centeres_match(plate_list,tracks_status)
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
