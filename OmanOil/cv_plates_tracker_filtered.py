@@ -237,7 +237,7 @@ def main():
         ret, frame = cap.read(seqnumber=ret+1)
         if not ret:
             break
-        cv2_im_cropped = frame[190:504,235:1300] # This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
+        cv2_im_cropped = frame#[190:504,235:1300] # This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
 
         #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_cropped, inference_size)
@@ -280,6 +280,7 @@ def main():
             tracks_status = box_centeres_match(plate_list,tracks_status)
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
+        print(tracks_status)
         cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
