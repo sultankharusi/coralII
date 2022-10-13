@@ -110,8 +110,9 @@ def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xsca
     run_inference(case_interpreter, frame.tobytes())
     objs = get_objects(case_interpreter, 0.5)[:6]
     if objs:
-        print("plate # recognized!..", objs)
-        return objs
+        plate_clz = [case_model_labels[i[0]] for i in objs]
+        print("plate # recognized!..", plate_clz)
+        return plate_clz
     else:
         return None
 
