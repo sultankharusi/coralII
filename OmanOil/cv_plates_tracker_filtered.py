@@ -109,9 +109,8 @@ def char_align(resutls):
         pairs[i[2][0]] = i[0]
     return OrderedDict(sorted(pairs.items()))
 
-def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36
+def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36 
     print("Plate_inference")
-    print(plate)
     y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = cv2_im_cropped[y1:y2,x1:x2]
     cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
@@ -270,7 +269,7 @@ def main():
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     ll.append(i[1]) # Append the score
                     plate_list[get_center(i[2])] = ll # Append as a whole list with the center being the key
-                    print("Plate Center! ", get_center(i[2]), i[2])
+                    #print("Plate Center! ", get_center(i[2]), i[2])
                     
             np_array = np.array(buf_list) # x1,y1,x2,y2, score
             if buf_list:
@@ -296,6 +295,7 @@ def main():
         if tracks_status and plate_list:
             #print("Matching centers!")
             tracks_status = box_centeres_match(plate_list,tracks_status)
+            
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
         #print(tracks_status, "6")
