@@ -127,6 +127,10 @@ def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xsca
     else:
         return None
 
+def delete_sequence(tracks_status, i):
+    print(tracks_status.pop(i))
+    return tracks_status
+
 class FreshestFrame(threading.Thread):
     def __init__(self, capture, name='FreshestFrame'):
         self.capture = capture
@@ -286,7 +290,8 @@ def main():
         #print(tracks_status, "3")
         for i in keys_:
             if i not in [l[4] for l in treks]:
-                tracks_status.pop(i) # Go through delete sequence ... Set end time and all
+                 # Go through delete sequence ... Set end time and all
+                tracks_status = delete_sequence(tracks_status, i)
         #print(tracks_status, "4")
         for i in treks:
             if i[4] not in tracks_status.keys():
