@@ -239,7 +239,7 @@ def main():
     labels = read_label_file(args.labels)
     inference_size = input_size(interpreter)
     cap = cv2.VideoCapture(cam_id)
-    cap.set(cv2.CAP_PROP_FPS, 35)
+    cap.set(cv2.CAP_PROP_FPS, 15)
     cap = FreshestFrame(cap)
     ret = 0
     tracker = Sort(35,50)
