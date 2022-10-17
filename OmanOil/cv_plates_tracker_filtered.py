@@ -62,7 +62,7 @@ def box_centeres_match(plate_centers, vehicle_box):
                 box = vehicle_box[i]['box']
                 #print(box)
                 if is_inside(center, box):
-                    plate = plate_inference(plate_centers[center[:4]]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
+                    plate = plate_inference(plate_centers[center[:3]]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
                     if plate:
                         vehicle_box[i]['plate'] = plate
                         vehicle_box = sync_object(vehicle_box, i)
@@ -112,7 +112,7 @@ def char_align(resutls):
 def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36
     print("Plate_inference")
     print(plate)
-    y1,y2,x1,x2 = int(plate[1]*yscale),int(plate[3]*yscale),int(plate[0]*xscale),int(plate[2]*xscale)
+    y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = cv2_im_cropped[y1:y2,x1:x2]
     cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
     frame = cv2.resize(square_plates(frame), case_inference_size)
