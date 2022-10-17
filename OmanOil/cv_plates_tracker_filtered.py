@@ -107,7 +107,7 @@ def char_align(resutls):
     pairs = {}
     for i in resutls:
         pairs[i[2][0]] = i[0]
-    pairs_ordered = OrderedDict(sorted(pairs.items()))
+    return OrderedDict(sorted(pairs.items()))
 
 def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36
     print("Plate_inference")
