@@ -113,6 +113,7 @@ def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xsca
     print("Plate_inference")
     y1,y2,x1,x2 = int(plate[1]*yscale),int(plate[3]*yscale),int(plate[0]*xscale),int(plate[2]*xscale)
     frame = cv2_im_cropped[y1:y2,x1:x2]
+    cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
     frame = cv2.resize(square_plates(frame), case_inference_size)
     cv2.imwrite("/home/mendel/repo/Plate.jpg", frame)
     run_inference(case_interpreter, frame.tobytes())
