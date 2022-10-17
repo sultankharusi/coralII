@@ -103,18 +103,25 @@ case_interpreter.allocate_tensors()
 case_labels = read_label_file(case_model_labels)
 case_inference_size = input_size(case_interpreter)
 
+def char_align(resutls):
+    pairs = {}
+    for i in resutls:
+        pairs[i[2][0]] = i[0]
+    pairs_ordered = OrderedDict(sorted(pairs.items()))
+
 def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36
-    y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
-    frame = cv2_im_cropped[int(plate[1]):int(plate[3]),int(plate[0]):int(plate[2])]
+    y1,y2,x1,x2 = int(plate[1]*yscale),int(plate[3]*yscale),int(plate[0]*xscale),int(plate[2]*xscale)
+    frame = cv2_im_cropped[y1:y2,x1:x2]
     frame = cv2.resize(square_plates(frame), case_inference_size)
     cv2.imwrite("/home/mendel/repo/Plate.jpg", frame)
     run_inference(case_interpreter, frame.tobytes())
     objs = get_objects(case_interpreter, 0.5)[:6]
     if objs:
-        print(case_model_labels[1])
-        plate_clz = [case_model_labels[i[0]] for i in objs]
-        print("plate # recognized!..", plate_clz)
-        return plate_clz
+        plate_clz = char_align(obj)
+        plate_final = [case_labels[i] for i in plate_clz.values()]
+        plate_final = ''.join(plate_final)
+        print("plate # recognized!..", plate_final)
+        return plate_final
     else:
         return None
 
