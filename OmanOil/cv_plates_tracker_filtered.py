@@ -242,7 +242,7 @@ def main():
     cap.set(cv2.CAP_PROP_FPS, 35)
     cap = FreshestFrame(cap)
     ret = 0
-    tracker = Sort()
+    tracker = Sort(35,50)
     
     emptyslot = dict({ k:None for k in ('box','score','plate','intime','scync','out_time')})
     while True:
