@@ -303,7 +303,8 @@ def main():
                 else:
                     side = "B"
                 tracks_status[i[4]] = dict({'box':i[:4],'plate':None,'intime': get_time(), "side":side,'sync':None,'outtime':None})
-        print(tracks_status, "5")
+                
+        #print(tracks_status, "5")
         if tracks_status and plate_list:
             #print("Matching centers!")
             tracks_status = box_centeres_match(plate_list,tracks_status)
