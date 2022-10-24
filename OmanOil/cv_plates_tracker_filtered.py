@@ -128,6 +128,8 @@ def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xsca
         return None
 
 def delete_sequence(tracks_status, i):
+    tracks_status[i]["outtime"] = get_time()
+    print("outtime")
     print(tracks_status.pop(i))
     return tracks_status
 
