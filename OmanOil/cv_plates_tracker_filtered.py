@@ -264,7 +264,7 @@ def main():
             buf_list = []
             plate_list = {}
             for i in objs:
-                if i[0] in filtered:    
+                if i[0] in filtered and i[2][3] >= 230:    
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     #print("Car center,", i[2])
                     ll.append(i[1]) # Append the score
@@ -296,7 +296,7 @@ def main():
         for i in treks:
             if i[4] not in tracks_status.keys():
                 tracks_status[i[4]] = dict({'box':i[:4],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
-        #print(tracks_status, "5")
+        print(tracks_status, "5")
         if tracks_status and plate_list:
             #print("Matching centers!")
             tracks_status = box_centeres_match(plate_list,tracks_status)
