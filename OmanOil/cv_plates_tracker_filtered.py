@@ -296,8 +296,13 @@ def main():
                 tracks_status = delete_sequence(tracks_status, i)
         #print(tracks_status, "4")
         for i in treks:
+            side = None
             if i[4] not in tracks_status.keys():
-                tracks_status[i[4]] = dict({'box':i[:4],'plate':None,'intime': get_time(),'sync':None,'outtime':None})
+                if i[:4][2] > 190:
+                    side = "A"
+                else:
+                    side = "B"
+                tracks_status[i[4]] = dict({'box':i[:4],'plate':None,'intime': get_time(), "side":side,'sync':None,'outtime':None})
         print(tracks_status, "5")
         if tracks_status and plate_list:
             #print("Matching centers!")
