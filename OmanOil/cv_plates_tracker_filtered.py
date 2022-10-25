@@ -51,10 +51,12 @@ def send_file(data_raw, file_name, image=True):
 
 
 import time 
-def get_time(date=False):
+def get_time(date=False, simple=False):
     t = time.localtime()
     if date:
-        return time.strftime("%Y-%m-%d", t)   
+        return time.strftime("%Y-%m-%d", t)
+    if simple:
+        return time.strftime("%H_%M_%S", t)   
     return time.strftime("%H:%M:%S", t)
 
 
@@ -165,7 +167,7 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
         plate_final = [case_labels[i] for i in plate_clz.values()]
         plate_final = ''.join(plate_final)
         print("plate # recognized!..", plate_final)
-        pl_name = plate_final+'_'+V_box["entry_time"]+'_'+V_box["side"]+".jpg"
+        pl_name = plate_final+'_'+get_time(simple=True)+'_'+V_box["side"]+".jpg"
         print(pl_name, type(sq_frame))
         send_file(sq_frame, pl_name)
         return plate_final
