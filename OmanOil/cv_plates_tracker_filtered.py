@@ -43,7 +43,6 @@ def addObject(my_dictionary, id):
 def send_file(data_raw, file_name, image=True):
     add_image_url = "https://ai-maestro-demo.com/fastapi-db/AddVehicleImages"
     if image:
-        filename = f"{file_name}.jpg"
         cv2.imwrite(file_name, data_raw)
     files = [('images', (file_name,open(file_name, 'rb'), 'image/jpg'))]
     upload_status = requests.post(add_image_url, files=files)
@@ -166,7 +165,8 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
         plate_final = [case_labels[i] for i in plate_clz.values()]
         plate_final = ''.join(plate_final)
         print("plate # recognized!..", plate_final)
-        pl_name = plate_final+'_'+V_box["entry_time"]+'_'+V_box["side"]
+        pl_name = plate_final+'_'+V_box["entry_time"]+'_'+V_box["side"]+".jpg"
+        print(pl_name, type(sq_frame))
         send_file(sq_frame, pl_name)
         return plate_final
     else:
