@@ -152,13 +152,13 @@ def char_align(resutls):
         pairs[i[2][0]] = i[0]
     return OrderedDict(sorted(pairs.items()))
 
-def get_scaled_box(box, yscale=0.96, xscale=0.256, box_only = False):
+def get_scaled_box(box, yscale=1.22, xscale=0.36, box_only = False):
     y1,y2,x1,x2 = int(box[1]/yscale),int(box[3]/yscale),int(box[0]/xscale),int(box[2]/xscale)
     if box_only:
         return y1,y2,x1,x2
     return cv2_im_cropped[y1:y2,x1:x2]
 
-def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36 
+def plate_inference(plate,V_box,yscale=1.22,xscale=0.36): # OmanOil yscale 1.22, xscale 0.36 # Video is yscale=0.96,xscale=0.256
     print("Plate_inference")
     #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
@@ -311,7 +311,7 @@ def main():
         ret, frame = cap.read(seqnumber=ret+1)
         if not ret:
             break
-        cv2_im_cropped = frame#[190:504,235:1300] # This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
+        cv2_im_cropped = frame[190:504,235:1300] # This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
 
         #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_cropped, inference_size)
