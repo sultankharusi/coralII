@@ -1,4 +1,5 @@
 from __future__ import print_function
+from enum import unique
 import sys
 import threading
 
@@ -9,6 +10,8 @@ import os
 import numpy as np
 from collections import OrderedDict
 import time
+import requests
+import random
 
 from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
@@ -36,10 +39,24 @@ def addObject(my_dictionary, id):
         return my_dictionary
     
 
+# API stuff
+def send_file(data_raw, file_name, image=True):
+    add_image_url = "https://ai-maestro-demo.com/fastapi-db/AddVehicleImages"
+    if image:
+        filename = f"{file_name}.jpg"
+        cv2.imwrite(file_name, data_raw)
+    files = [('images', (file_name,open(file_name, 'rb'), 'image/jpg'))]
+    upload_status = requests.post(add_image_url, files=files)
+    os.remove(file_name)
+
+
+
 import time 
-def get_time():
+def get_time(date=False):
     t = time.localtime()
-    return time.strftime("%D:%H:%M:%S", t)
+    if date:
+        return time.strftime("%Y-%m-%d", t)   
+    return time.strftime("%H:%M:%S", t)
 
 
 
@@ -50,7 +67,26 @@ def is_inside(center, box):
         return False
 
 def sync_object(vehicles, index_):
-    print('sending info...', vehicles[index_]) # Update info
+    vehicle = vehicles[index_]
+    url = "https://ai-maestro-demo.com/fastapi-db/AddVehicle/"
+    unique_id = int(f"{vehicle['id']}{random.randint(1,999)}")
+    name = f"{unique_id}_{vehicle['pump']}_{vehicle['side']}_{vehicle['plate']}.jpg"
+    print('sending info...', vehicle) # Update info
+    V_img = get_scaled_box(vehicle["box"])
+    send_file(V_img, name)
+    time = vehicle['entry_time']
+    data = [
+        {"id":vehicle['id'],
+        "project_name":"omanoil",
+        "pump":vehicle['pump'],
+        "side":vehicle['side'],
+        "plate":vehicle['plate'],
+        "image_name":name,
+        "date": get_time(date=True),
+        "entry_time": time,
+        "exit_time": time,
+        "stay_time": '00:00:00',
+        }]
     vehicles[index_]['sync'] = True
     return vehicles
 
@@ -62,7 +98,7 @@ def box_centeres_match(plate_centers, vehicle_box):
                 box = vehicle_box[i]['box']
                 #print(box)
                 if is_inside(center, box):
-                    plate = plate_inference(plate_centers[center[:3]]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
+                    plate = plate_inference(plate_centers[center[:3]], vehicle_box[i]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
                     if plate:
                         vehicle_box[i]['plate'] = plate
                         vehicle_box = sync_object(vehicle_box, i)
@@ -109,13 +145,20 @@ def char_align(resutls):
         pairs[i[2][0]] = i[0]
     return OrderedDict(sorted(pairs.items()))
 
-def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36 
+def get_scaled_box(box, yscale=0.96, xscale=0.256, box_only = False):
+    y1,y2,x1,x2 = int(box[1]/yscale),int(box[3]/yscale),int(box[0]/xscale),int(box[2]/xscale)
+    if box_only:
+        return y1,y2,x1,x2
+    return cv2_im_cropped[y1:y2,x1:x2]
+
+def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36 
     print("Plate_inference")
-    y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
-    frame = cv2_im_cropped[y1:y2,x1:x2]
-    cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
-    frame = cv2.resize(square_plates(frame), case_inference_size)
-    cv2.imwrite("/home/mendel/repo/Plate.jpg", frame)
+    #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
+    frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
+    #cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
+    sq_frame = square_plates(frame)
+    frame = cv2.resize(sq_frame, case_inference_size)
+    #cv2.imwrite("/home/mendel/repo/Plate.jpg", frame)
     run_inference(case_interpreter, frame.tobytes())
     objs = get_objects(case_interpreter, 0.5)[:6]
     if objs:
@@ -123,6 +166,8 @@ def plate_inference(plate,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xsca
         plate_final = [case_labels[i] for i in plate_clz.values()]
         plate_final = ''.join(plate_final)
         print("plate # recognized!..", plate_final)
+        pl_name = plate_final+'_'+V_box["entry_time"]+'_'+V_box["side"]
+        send_file(sq_frame, pl_name)
         return plate_final
     else:
         return None
@@ -249,6 +294,7 @@ def main():
     cap = FreshestFrame(cap)
     ret = 0
     tracker = Sort(30,50)
+    pump = 6
     
     emptyslot = dict({ k:None for k in ('box','score','plate','intime','scync','out_time')})
     while True:
@@ -302,7 +348,9 @@ def main():
                     side = "A"
                 else:
                     side = "B"
-                tracks_status[i[4]] = dict({'box':i[:4],'plate':None,'intime': get_time(), "side":side,'sync':None,'outtime':None})
+                tracks_status[i[4]] = dict({'id':i[4],'box':i[:4],'plate':None,
+                                            'entry_time': get_time(), "pump":pump,"side":side,'sync':None,
+                                            'exit_time':None})
                 
         #print(tracks_status, "5")
         if tracks_status and plate_list:
