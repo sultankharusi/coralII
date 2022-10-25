@@ -12,6 +12,7 @@ from collections import OrderedDict
 import time
 import requests
 import random
+import json
 
 from pycoral.adapters.common import input_size
 from pycoral.adapters.detect import get_objects
@@ -40,11 +41,14 @@ def addObject(my_dictionary, id):
     
 
 # API stuff
-def send_file(data_raw, file_name, image=True):
+def send_file(data_raw, file_name, image=True, json=False):
     add_image_url = "https://ai-maestro-demo.com/fastapi-db/AddVehicleImages"
     if image:
         cv2.imwrite(file_name, data_raw)
-    files = [('images', (file_name,open(file_name, 'rb'), 'image/jpg'))]
+        files = [('images', (file_name,open(file_name, 'rb'), 'image/jpg'))]
+    if json:
+        with open(file_name, "w") as write_file:
+            json.dump(data_raw, write_file, indent=4)
     upload_status = requests.post(add_image_url, files=files)
     os.remove(file_name)
 
@@ -178,6 +182,8 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
 
 def delete_sequence(tracks_status, i):
     tracks_status[i]["outtime"] = get_time()
+    Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
+    update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["outtime"]})
     print("outtime")
     print(tracks_status.pop(i))
     return tracks_status
