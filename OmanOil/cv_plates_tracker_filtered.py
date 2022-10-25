@@ -70,14 +70,15 @@ def is_inside(center, box):
 def sync_object(vehicles, index_):
     vehicle = vehicles[index_]
     url = "https://ai-maestro-demo.com/fastapi-db/AddVehicle/"
-    unique_id = int(f"{vehicle['id']}{random.randint(1,999)}")
+    print(vehicle["id"])
+    unique_id = int(float(f"{vehicle['id']}{random.randint(1,999)}"))
     name = f"{unique_id}_{vehicle['pump']}_{vehicle['side']}_{vehicle['plate']}.jpg"
     print('sending info...', vehicle) # Update info
     V_img = get_scaled_box(vehicle["box"])
     send_file(V_img, name)
     time = vehicle['entry_time']
     data = [
-        {"id":vehicle['id'],
+        {"id":unique_id,
         "project_name":"omanoil",
         "pump":vehicle['pump'],
         "side":vehicle['side'],
@@ -88,6 +89,7 @@ def sync_object(vehicles, index_):
         "exit_time": time,
         "stay_time": '00:00:00',
         }]
+    posting = requests.post(url, json = data)
     vehicles[index_]['sync'] = True
     return vehicles
 
