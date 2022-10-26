@@ -138,8 +138,8 @@ def get_center(box):
         x0, y0, x1, y1 = box
         return (x0+x1)/2, (y0+y1)/2
 
-case_model = "model_APNR_edgetpu.tflite"
-case_model_labels = "label_OCR.txt"
+case_model = "/home/mendel/repo/coralII/OmanOil/model_APNR_edgetpu.tflite"
+case_model_labels = "/home/mendel/repo/coralII/OmanOil/label_OCR.txt"
 print('Loading {} with {} labels.'.format(case_model, case_model_labels))
 case_interpreter = make_interpreter(case_model)
 case_interpreter.allocate_tensors()
