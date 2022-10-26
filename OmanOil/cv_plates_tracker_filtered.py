@@ -19,7 +19,10 @@ from pycoral.adapters.detect import get_objects
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
-from ...sort import *
+
+
+os.chdir("home/mendel/repo/coralII/OmanOil")
+from sort import *
 
 
 class FixSizeOrderedDict(OrderedDict):
