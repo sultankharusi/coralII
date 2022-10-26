@@ -56,7 +56,7 @@ def send_file(data_raw, file_name, image=True, json=False):
     if json:
         with open(file_name, "w") as write_file:
             json.dump(data_raw, write_file, indent=4)
-    #upload_status = requests.post(add_image_url, files=files)
+    upload_status = requests.post(add_image_url, files=files)
     os.remove(file_name)
 
 
@@ -100,7 +100,7 @@ def sync_object(vehicles, index_):
         "exit_time": time,
         "stay_time": '00:00:00',
         }]
-    #posting = requests.post(url, json = data)
+    posting = requests.post(url, json = data)
     vehicles[index_]['sync'] = True
     return vehicles
 
@@ -172,14 +172,14 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
     #cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
     sq_frame = square_plates(frame)
     frame = cv2.resize(sq_frame, case_inference_size)
-    cv2.imwrite("/home/mendel/repo/Plate1.jpg", frame)
+    #cv2.imwrite("/home/mendel/repo/Plate1.jpg", frame)
     run_inference(case_interpreter, frame.tobytes())
     objs = get_objects(case_interpreter, 0.5)[:6]
     if objs:
         plate_clz = char_align(objs)
         plate_final = [case_labels[i] for i in plate_clz.values()]
         plate_final = ''.join(plate_final)
-        #print("plate # recognized!..", plate_final)
+        print("plate # recognized!..", plate_final)
         pl_name = plate_final+'_'+get_time(simple=True)+'_'+V_box["side"]+".jpg"
         #print(pl_name, type(sq_frame))
         send_file(sq_frame, pl_name)
@@ -193,7 +193,7 @@ def delete_sequence(tracks_status, i):
     
     if not tracks_status[i]["missing_frames"]%10:
         Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-        #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
+        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
     elif tracks_status[i]["missing_frames"] > 50:
         popped = tracks_status.pop(i)
@@ -375,7 +375,7 @@ def main():
                                             'exit_time':None, "missing_frames":0})
             else:
                 tracks_status[i[4]]["missing_frames"] = 0
-                #print("Reset missing frames!")
+                print("Reset missing frames!")
                 
         #print(tracks_status, "5")
         if tracks_status and plate_list: # Perfect
@@ -385,12 +385,12 @@ def main():
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
         #print(tracks_status, "6")
-        #cv2.imshow('frame', cv2_im)
+        cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    #cap.release()
-    #cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
