@@ -138,7 +138,7 @@ def square_plates(plate):
     return plate#, H, W
 
 def get_center(box):
-        x0, y0, x1, y1 = boxs
+        x0, y0, x1, y1 = box
         return (x0+x1)/2, (y0+y1)/2
 
 case_model = "model_APNR_edgetpu.tflite"
