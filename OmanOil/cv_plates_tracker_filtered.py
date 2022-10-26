@@ -21,7 +21,7 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
 
-os.chdir("home/mendel/repo/coralII/OmanOil")
+#os.chdir("home/mendel/repo/coralII/OmanOil")
 from sort import *
 
 
