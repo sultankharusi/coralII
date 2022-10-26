@@ -138,11 +138,11 @@ def square_plates(plate):
     return plate#, H, W
 
 def get_center(box):
-        x0, y0, x1, y1 = box
+        x0, y0, x1, y1 = boxs
         return (x0+x1)/2, (y0+y1)/2
 
-case_model = "/home/mendel/repo/coralII/OmanOil/model_APNR_edgetpu.tflite"
-case_model_labels = "/home/mendel/repo/coralII/OmanOil/label_OCR.txt"
+case_model = "model_APNR_edgetpu.tflite"
+case_model_labels = "label_OCR.txt"
 print('Loading {} with {} labels.'.format(case_model, case_model_labels))
 case_interpreter = make_interpreter(case_model)
 case_interpreter.allocate_tensors()
@@ -270,10 +270,10 @@ class FreshestFrame(threading.Thread):
 def main():
     global cv2_im_cropped
     default_stream_model_dir = ''
-    default_stream_model = '/home/mendel/repo/coralII/OmanOil/Plates_vehicle_edgetpu.tflite'
-    default_stream_labels = '/home/mendel/repo/coralII/OmanOil/label_VP.txt'
-    case_model = "/home/mendel/repo/coralII/OmanOil/model_APNR_edgetpu.tflite"
-    case_model_labels = "/home/mendel/repo/coralII/OmanOil/label_OCR.txt"
+    default_stream_model = 'Plates_vehicle_edgetpu.tflite'
+    default_stream_labels = 'label_VP.txt'
+    case_model = "model_APNR_edgetpu.tflite"
+    case_model_labels = "label_OCR.txt"
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', help='.tflite model path',
                         default=os.path.join(default_stream_model_dir,default_stream_model))
