@@ -168,7 +168,7 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
     #cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
     sq_frame = square_plates(frame)
     frame = cv2.resize(sq_frame, case_inference_size)
-    #cv2.imwrite("/home/mendel/repo/Plate.jpg", frame)
+    cv2.imwrite("/home/mendel/repo/Plate1.jpg", frame)
     run_inference(case_interpreter, frame.tobytes())
     objs = get_objects(case_interpreter, 0.5)[:6]
     if objs:
