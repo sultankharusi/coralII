@@ -189,11 +189,11 @@ def delete_sequence(tracks_status, i):
     tracks_status[i]["exit_time"] = get_time()
     tracks_status[i]["missing_frames"] += 1
     
-    if not tracks_status[i]["missing_frames"]%10:
+    if not tracks_status[i]["missing_frames"]%40:
         Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
         update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
-    elif tracks_status[i]["missing_frames"] > 50:
+    elif tracks_status[i]["missing_frames"] > 60:
         popped = tracks_status.pop(i)
         #print("deleted !!", popped)    
     return tracks_status
@@ -373,7 +373,7 @@ def main():
                                             'exit_time':None, "missing_frames":0})
             else:
                 tracks_status[i[4]]["missing_frames"] = 0
-                print("Reset missing frames!")
+                #print("Reset missing frames!")
                 
         #print(tracks_status, "5")
         if tracks_status and plate_list: # Perfect
