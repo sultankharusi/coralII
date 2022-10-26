@@ -181,11 +181,11 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
         return None
 
 def delete_sequence(tracks_status, i):
-    tracks_status[i]["outtime"] = get_time()
+    tracks_status[i]["exit_time"] = get_time()
     Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-    #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["outtime"]})
+    #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
     print("outtime")
-    print(tracks_status.pop(i))
+    #print(tracks_status.pop(i))
     return tracks_status
 
 class FreshestFrame(threading.Thread):
