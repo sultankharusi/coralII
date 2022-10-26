@@ -182,10 +182,15 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
 
 def delete_sequence(tracks_status, i):
     tracks_status[i]["exit_time"] = get_time()
-    Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-    #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
-    print("outtime")
-    #print(tracks_status.pop(i))
+    tracks_status[i]["missing_frames"] += 1
+    
+    if not tracks_status[i]["missing_frames"]%10:
+        Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
+        #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
+        print("outtime")
+    elif tracks_status[i]["missing_frames"] > 50:
+        print("deleted !!", tracks_status.pop(i))
+        
     return tracks_status
 
 class FreshestFrame(threading.Thread):
@@ -360,7 +365,10 @@ def main():
                     side = "B"
                 tracks_status[i[4]] = dict({'id':i[4],'box':i[:4],'plate':None,
                                             'entry_time': get_time(), "pump":pump,"side":side,'sync':None,
-                                            'exit_time':None})
+                                            'exit_time':None, "missing_frames":0})
+            else:
+                tracks_status[i[4]]["missing_frames"] = 0
+                print("Reset missing frames!")
                 
         #print(tracks_status, "5")
         if tracks_status and plate_list: # Perfect
