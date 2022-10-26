@@ -196,8 +196,8 @@ def delete_sequence(tracks_status, i):
         #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
     elif tracks_status[i]["missing_frames"] > 50:
-        #print("deleted !!", tracks_status.pop(i))
-        
+        popped = tracks_status.pop(i)
+        #print("deleted !!", popped)    
     return tracks_status
 
 class FreshestFrame(threading.Thread):
