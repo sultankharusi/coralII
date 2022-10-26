@@ -38,7 +38,7 @@ class FixSizeOrderedDict(OrderedDict):
         OrderedDict.__setitem__(self, key, value)
         if self._max > 0:
             if len(self) > self._max:
-                print("Popped! ")
+                #print("Popped! ")
                 self.popitem(False)
 
 def addObject(my_dictionary, id):
@@ -81,10 +81,10 @@ def is_inside(center, box):
 def sync_object(vehicles, index_):
     vehicle = vehicles[index_]
     url = "https://ai-maestro-demo.com/fastapi-db/AddVehicle/"
-    print(vehicle["id"])
+    #print(vehicle["id"])
     unique_id = int(float(f"{vehicle['id']}{random.randint(1,999)}"))
     name = f"{unique_id}_{vehicle['pump']}_{vehicle['side']}_{vehicle['plate']}.jpg"
-    print('sending info...', vehicle) # Update info
+    #print('sending info...', vehicle) # Update info
     V_img = get_scaled_box(vehicle["box"])
     send_file(V_img, name)
     time = vehicle['entry_time']
@@ -147,7 +147,7 @@ def get_center(box):
 
 case_model = "model_APNR_edgetpu.tflite"
 case_model_labels = "label_OCR.txt"
-print('Loading {} with {} labels.'.format(case_model, case_model_labels))
+#print('Loading {} with {} labels.'.format(case_model, case_model_labels))
 case_interpreter = make_interpreter(case_model)
 case_interpreter.allocate_tensors()
 case_labels = read_label_file(case_model_labels)
@@ -166,7 +166,7 @@ def get_scaled_box(box, yscale=0.96, xscale=0.256, box_only = False):
     return cv2_im_cropped[y1:y2,x1:x2]
 
 def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22, xscale 0.36 # Video is yscale=0.96,xscale=0.256
-    print("Plate_inference")
+    #print("Plate_inference")
     #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
     #cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
@@ -179,9 +179,9 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
         plate_clz = char_align(objs)
         plate_final = [case_labels[i] for i in plate_clz.values()]
         plate_final = ''.join(plate_final)
-        print("plate # recognized!..", plate_final)
+        #print("plate # recognized!..", plate_final)
         pl_name = plate_final+'_'+get_time(simple=True)+'_'+V_box["side"]+".jpg"
-        print(pl_name, type(sq_frame))
+        #print(pl_name, type(sq_frame))
         send_file(sq_frame, pl_name)
         return plate_final
     else:
@@ -194,9 +194,9 @@ def delete_sequence(tracks_status, i):
     if not tracks_status[i]["missing_frames"]%10:
         Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
         #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"], "exit_time":tracks_status[i]["exit_time"]})
-        print("outtime")
+        #print("outtime")
     elif tracks_status[i]["missing_frames"] > 50:
-        print("deleted !!", tracks_status.pop(i))
+        #print("deleted !!", tracks_status.pop(i))
         
     return tracks_status
 
@@ -305,8 +305,8 @@ def main():
     classes_of_interest = ['Vehicle']
     filtered = [clsz.index(i) for i in classes_of_interest]
     tracks_status = FixSizeOrderedDict(max=4)
-    print(tracks_status, "1")
-    print('Loading {} with {} labels.'.format(args.model, args.labels))
+    #print(tracks_status, "1")
+    #print('Loading {} with {} labels.'.format(args.model, args.labels))
     interpreter = make_interpreter(args.model)
     interpreter.allocate_tensors()
     labels = read_label_file(args.labels)
@@ -353,7 +353,7 @@ def main():
         else:
             treks = tracker.update()
         
-        print("Treks", treks)
+        #print("Treks", treks)
         #print("objects", objs)
         #print(tracks_status, "2")
         keys_ = list(tracks_status.keys())
@@ -375,7 +375,7 @@ def main():
                                             'exit_time':None, "missing_frames":0})
             else:
                 tracks_status[i[4]]["missing_frames"] = 0
-                print("Reset missing frames!")
+                #print("Reset missing frames!")
                 
         #print(tracks_status, "5")
         if tracks_status and plate_list: # Perfect
@@ -385,12 +385,12 @@ def main():
         
         cv2_im = append_objs_to_img(cv2_im_cropped, inference_size, treks, labels)
         #print(tracks_status, "6")
-        cv2.imshow('frame', cv2_im)
+        #cv2.imshow('frame', cv2_im)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.release()
-    cv2.destroyAllWindows()
+    #cap.release()
+    #cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
