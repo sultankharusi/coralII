@@ -22,6 +22,10 @@ from pycoral.utils.edgetpu import run_inference
 
 
 #os.chdir("home/mendel/repo/coralII/OmanOil")
+os.system("sudo ifconfig eth0 down")
+os.system("sudo ifconfig eth0 169.254.0.211")
+os.system("sudo ifconfig eth0 up")
+
 from sort import *
 
 
