@@ -107,10 +107,10 @@ def box_centeres_match(plate_centers, vehicle_box):
     for center in plate_centers.keys():
         for i in keys_:
             if not vehicle_box[i]['plate']:
-                vehicle_box[i]['min_plate_hits']+=1
+                vehicle_box[i]['plate_hits']+=1
                 box = vehicle_box[i]['box']
                 #print(box)
-                if is_inside(center, box) and vehicle_box[i]['min_plate_hits'] > 5:
+                if is_inside(center, box) and vehicle_box[i]['plate_hits'] > 5:
                     try: # Ugly fix for the issue arrized on 26th October
                         plate = plate_inference(plate_centers[center[:3]], vehicle_box[i]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
                     except:
