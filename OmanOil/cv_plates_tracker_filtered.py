@@ -87,7 +87,7 @@ def sync_object(vehicles, index_):
     send_file(V_img, name)
     time = vehicle['entry_time']
     data = [
-        {"id":int(float(vehicle['id'])+329),
+        {"id":int(float(vehicle['id'])+350),
         "project_name":"omanoil",
         "pump":vehicle['pump'],
         "side":vehicle['side'],
@@ -107,10 +107,14 @@ def box_centeres_match(plate_centers, vehicle_box):
     for center in plate_centers.keys():
         for i in keys_:
             if not vehicle_box[i]['plate']:
+                vehicle_box[i]['min_plate_hits']+=1
                 box = vehicle_box[i]['box']
                 #print(box)
-                if is_inside(center, box):
-                    plate = plate_inference(plate_centers[center[:3]], vehicle_box[i]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
+                if is_inside(center, box) and vehicle_box[i]['min_plate_hits'] > 5:
+                    try: # Ugly fix for the issue arrized on 26th October
+                        plate = plate_inference(plate_centers[center[:3]], vehicle_box[i]) # Run inference on plate location only print this!! write this functiona and make the frame global... Do not foget the scale thingy
+                    except:
+                        plate = None
                     if plate:
                         vehicle_box[i]['plate'] = plate
                         vehicle_box = sync_object(vehicle_box, i)
@@ -135,7 +139,7 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels):
 def square_plates(plate):
     H, W = plate.shape[0], plate.shape[1]
     if int(W*0.75) > H:
-        padding = int(W*0.75) - H
+        padding = int(W*0.7) - H
         return cv2.copyMakeBorder(plate, 0, padding, 0, 0, cv2.BORDER_CONSTANT, None, (0,0,0))#, H+padding, W
     return plate#, H, W
 
@@ -191,7 +195,7 @@ def delete_sequence(tracks_status, i):
     
     if not tracks_status[i]["missing_frames"]%40:
         Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+329, "exit_time":tracks_status[i]["exit_time"]})
+        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+350, "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
     elif tracks_status[i]["missing_frames"] > 60:
         popped = tracks_status.pop(i)
@@ -313,7 +317,7 @@ def main():
     cap.set(cv2.CAP_PROP_FPS, 15)
     cap = FreshestFrame(cap)
     ret = 0
-    tracker = Sort(50,50)
+    tracker = Sort(50,50, 0.5)
     pump = 6
     
     emptyslot = dict({ k:None for k in ('box','score','plate','intime','scync','out_time')})
@@ -362,6 +366,7 @@ def main():
                 tracks_status = delete_sequence(tracks_status, i)
         #print(tracks_status, "4")
         for i in treks:
+            # If 
             side = None
             if i[4] not in tracks_status.keys():
                 if i[:4][2] > 190:
@@ -370,7 +375,7 @@ def main():
                     side = "B"
                 tracks_status[i[4]] = dict({'id':i[4],'box':i[:4],'plate':None,
                                             'entry_time': get_time(), "pump":pump,"side":side,'sync':None,
-                                            'exit_time':None, "missing_frames":0})
+                                            'exit_time':None, "missing_frames":0, "plate_hits":0})
             else:
                 tracks_status[i[4]]["missing_frames"] = 0
                 #print("Reset missing frames!")
