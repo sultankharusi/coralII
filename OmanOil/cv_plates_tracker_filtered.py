@@ -87,7 +87,7 @@ def sync_object(vehicles, index_):
     send_file(V_img, name)
     time = vehicle['entry_time']
     data = [
-        {"id":int(float(vehicle['id'])+350),
+        {"id":int(float(vehicle['id'])+834),
         "project_name":"omanoil",
         "pump":vehicle['pump'],
         "side":vehicle['side'],
@@ -195,7 +195,7 @@ def delete_sequence(tracks_status, i):
     
     if not tracks_status[i]["missing_frames"]%40:
         Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+350, "exit_time":tracks_status[i]["exit_time"]})
+        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+834, "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
     elif tracks_status[i]["missing_frames"] > 60:
         popped = tracks_status.pop(i)
