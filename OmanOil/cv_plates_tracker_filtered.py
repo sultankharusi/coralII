@@ -45,6 +45,17 @@ def addObject(my_dictionary, id):
         return my_dictionary
     
 
+def get_latest_id():
+    last_id_url = "https://ai-maestro-demo.com/fastapi-db/GetLastVehicleID/"
+    try:
+        status = requests.get(last_id_url)
+        last_id = status.json()['id']
+        print("Last ID",last_id)
+    except:
+        last_id = 10000
+    return last_id
+
+
 # API stuff
 def send_file(data_raw, file_name, image=True, json=False):
     add_image_url = "https://ai-maestro-demo.com/fastapi-db/AddVehicleImages"
@@ -87,7 +98,7 @@ def sync_object(vehicles, index_):
     send_file(V_img, name)
     time = vehicle['entry_time']
     data = [
-        {"id":int(float(vehicle['id'])+834),
+        {"id":int(float(vehicle['id'])+last_id),
         "project_name":"omanoil",
         "pump":vehicle['pump'],
         "side":vehicle['side'],
@@ -195,7 +206,7 @@ def delete_sequence(tracks_status, i):
     
     if not tracks_status[i]["missing_frames"]%40:
         Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+834, "exit_time":tracks_status[i]["exit_time"]})
+        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+last_id, "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
     elif tracks_status[i]["missing_frames"] > 60:
         popped = tracks_status.pop(i)
@@ -275,6 +286,7 @@ class FreshestFrame(threading.Thread):
 
 def main():
     global cv2_im_cropped
+    global last_id
     default_stream_model_dir = ''
     default_stream_model = 'Plates_vehicle_edgetpu.tflite'
     default_stream_labels = 'label_VP.txt'
@@ -319,7 +331,7 @@ def main():
     ret = 0
     tracker = Sort(50,50, 0.5)
     pump = 6
-    
+    last_id = get_latest_id()
     emptyslot = dict({ k:None for k in ('box','score','plate','intime','scync','out_time')})
     while True:
         ret, frame = cap.read(seqnumber=ret+1)
