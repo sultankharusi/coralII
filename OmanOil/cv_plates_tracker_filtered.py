@@ -205,9 +205,10 @@ def delete_sequence(tracks_status, i):
     tracks_status[i]["missing_frames"] += 1
     
     if not tracks_status[i]["missing_frames"]%40:
-        Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
-        update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+last_id, "exit_time":tracks_status[i]["exit_time"]})
+        #Update_url = "https://ai-maestro-demo.com/fastapi-db/UpdateVehicle/"
+        #update_status = requests.post(Update_url, json={"id":tracks_status[i]["id"]+last_id, "exit_time":tracks_status[i]["exit_time"]})
         #print("outtime")
+        pass
     elif tracks_status[i]["missing_frames"] > 60:
         popped = tracks_status.pop(i)
         #print("deleted !!", popped)    
