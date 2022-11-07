@@ -163,6 +163,8 @@ def plate_inference(plate,V_box,yscale=0.96,xscale=0.256): # OmanOil yscale 1.22
     #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
     #cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    # Thresholds augmentations ?
     sq_frame = square_plates(frame)
     frame = cv2.resize(sq_frame, case_inference_size)
     #cv2.imwrite("/home/mendel/repo/Plate.jpg", frame)
