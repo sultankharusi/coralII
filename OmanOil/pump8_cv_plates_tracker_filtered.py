@@ -351,7 +351,7 @@ def main():
             buf_list = []
             plate_list = {}
             for i in objs:
-                if i[0] in filtered and i[2][3] >= 285 and i[2][3] <=380:    
+                if i[0] in filtered and i[2][3] >= 280: # and i[2][3] <=380:    
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     #print("Car center,", i[2])
                     ll.append(i[1]) # Append the score
