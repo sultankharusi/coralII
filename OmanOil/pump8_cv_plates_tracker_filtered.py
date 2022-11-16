@@ -172,13 +172,13 @@ def char_align(resutls):
         pairs[i[2][0]] = i[0]
     return OrderedDict(sorted(pairs.items()))
 
-def get_scaled_box(box, yscale=1.08, xscale=0.31, box_only = False):
+def get_scaled_box(box, yscale=1.04, xscale=0.31, box_only = False):
     y1,y2,x1,x2 = abs(int(box[1]/yscale)),abs(int(box[3]/yscale)),abs(int(box[0]/xscale)),abs(int(box[2]/xscale))
     if box_only:
         return y1,y2,x1,x2
     return cv2_im_cropped[y1:y2,x1:x2]
 
-def plate_inference(plate,V_box,yscale=1.08,xscale=0.31): # OmanOil yscale 1.22, xscale 0.36 # Video is yscale=0.96,xscale=0.256
+def plate_inference(plate,V_box,yscale=1.04,xscale=0.31): # OmanOil yscale 1.22, xscale 0.36 # Video is yscale=0.96,xscale=0.256
     #print("Plate_inference")
     #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
@@ -340,8 +340,8 @@ def main():
         ret, frame = cap.read(seqnumber=ret+1)
         if not ret:
             break
-        cv2_im_cropped = frame[100:455,520:1750] #170:504 (1.15), 160:1320 (0.33) *Orig* 190:504,235:1300 This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
-                                                #355(1.08) * 1230 (0.31)   Pump8
+        cv2_im_cropped = frame[100:470,505:1740] #170:504 (1.15), 160:1320 (0.33) *Orig* 190:504,235:1300 This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
+                                                #370(1.04) * 1235 (0.31)   Pump8
         #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_cropped, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
@@ -351,7 +351,7 @@ def main():
             buf_list = []
             plate_list = {}
             for i in objs:
-                if i[0] in filtered and i[2][3] >= 295 and i[2][3] <=370:    
+                if i[0] in filtered and i[2][3] >= 285 and i[2][3] <=380:    
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     #print("Car center,", i[2])
                     ll.append(i[1]) # Append the score
