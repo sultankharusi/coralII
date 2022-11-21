@@ -113,7 +113,7 @@ def main():
             if not ret:
                 break
             cv2_im_cropped = frame#[190:504,235:1300] # This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
-            send_file(cv2_im_cropped, f"{cam_id}_{get_time(simple=True)}.jpg")
+            send_file(cv2_im_cropped, f"Craver_{cam_id}_{get_time(simple=True)}.jpg")
             break
         cap.release()
         
