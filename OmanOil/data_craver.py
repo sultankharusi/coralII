@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from collections import OrderedDict
 import time
-
+import requests
 
 
 class FreshestFrame(threading.Thread):
