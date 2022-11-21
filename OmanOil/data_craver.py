@@ -7,7 +7,7 @@ import numpy as np
 from collections import OrderedDict
 import time
 import requests
-
+import os
 
 class FreshestFrame(threading.Thread):
     def __init__(self, capture, name='FreshestFrame'):
