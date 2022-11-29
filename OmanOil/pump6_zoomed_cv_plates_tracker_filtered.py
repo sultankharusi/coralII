@@ -128,7 +128,7 @@ def box_centeres_match(plate_centers, vehicle_box):
                         plate = None
                     if plate:
                         vehicle_box[i]['plate'] = plate
-                        vehicle_box = sync_object(vehiclse_box, i)
+                        vehicle_box = sync_object(vehicle_box, i)
     return vehicle_box
     
 def get_patch_from_src(file_name, orig, point):
