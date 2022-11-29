@@ -128,7 +128,7 @@ def box_centeres_match(plate_centers, vehicle_box):
                         plate = None
                     if plate:
                         vehicle_box[i]['plate'] = plate
-                        vehicle_box = sync_object(vehicle_box, i)
+                        vehicle_box = sync_object(vehiclse_box, i)
     return vehicle_box
     
 def get_patch_from_src(file_name, orig, point):
@@ -172,13 +172,13 @@ def char_align(resutls):
         pairs[i[2][0]] = i[0]
     return OrderedDict(sorted(pairs.items()))
 
-def get_scaled_box(box, yscale=1.15, xscale=0.33, box_only = False):
+def get_scaled_box(box, yscale=0.77, xscale=0.24, box_only = False): #(0.77), 0:1600 (0.24)
     y1,y2,x1,x2 = abs(int(box[1]/yscale)),abs(int(box[3]/yscale)),abs(int(box[0]/xscale)),abs(int(box[2]/xscale))
     if box_only:
         return y1,y2,x1,x2
     return cv2_im_cropped[y1:y2,x1:x2]
 
-def plate_inference(plate,V_box,yscale=1.15,xscale=0.33): # OmanOil yscale 1.22, xscale 0.36 # Video is yscale=0.96,xscale=0.256
+def plate_inference(plate,V_box,yscale=0.77,xscale=0.24): # OmanOil yscale 1.22, xscale 0.36 # Video is yscale=0.96,xscale=0.256
     #print("Plate_inference")
     #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
@@ -339,7 +339,7 @@ def main():
         ret, frame = cap.read(seqnumber=ret+1)
         if not ret:
             break
-        cv2_im_cropped = frame[65:565,0:1600] # 384 inf 170:504 (1.15), 160:1320 (0.33) *Orig* 190:504,235:1300 This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
+        cv2_im_cropped = frame[65:565,0:1600] # 384 inf 65:565 (0.77), 0:1600 (0.24) *Orig* 190:504,235:1300 This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
 
         #cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_cropped, inference_size)
