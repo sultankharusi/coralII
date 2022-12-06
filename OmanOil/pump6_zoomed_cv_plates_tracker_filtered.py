@@ -196,6 +196,7 @@ def plate_inference(plate,V_box,yscale=0.77,xscale=0.24): # OmanOil yscale 1.22,
         print("plate # recognized!..", plate_final)
         pl_name = plate_final+'_'+get_time(simple=True)+'_'+V_box["side"]+".jpg"
         #print(pl_name, type(sq_frame))
+        sq_frame = cv2.cvtColor(sq_frame, cv2.COLOR_BGR2RGB)
         send_file(sq_frame, pl_name)
         return plate_final
     else:
