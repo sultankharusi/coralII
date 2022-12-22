@@ -342,7 +342,7 @@ def main():
             break
         cv2_im_cropped = frame[380:1010,:] #384/630 (0.6), 384/1920 (0.2) *Orig* 190:504,235:1300 This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
                                                 #370(1.04) * 1235 (0.31)   Pump8
-        cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_RGB2BGR)
+        cv2_im_cropped = cv2.cvtColor(cv2_im_cropped, cv2.COLOR_RGB2BGR)
         cv2_im_rgb = cv2.resize(cv2_im_cropped, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, args.threshold)[:args.top_k]
