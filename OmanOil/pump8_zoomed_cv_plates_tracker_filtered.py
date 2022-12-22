@@ -183,7 +183,7 @@ def plate_inference(plate,V_box,yscale=0.6,xscale=0.2): # OmanOil yscale 1.22, x
     #y1,y2,x1,x2 = int(plate[1]/yscale),int(plate[3]/yscale),int(plate[0]/xscale),int(plate[2]/xscale)
     frame = get_scaled_box(plate) #cv2_im_cropped[y1:y2,x1:x2]
     #cv2.imwrite("/home/mendel/repo/Plate_Cropped.jpg", frame)
-    #frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     sq_frame = square_plates(frame)
     frame = cv2.resize(sq_frame, case_inference_size, interpolation = cv2.INTER_CUBIC)
     #cv2.imwrite("/home/mendel/repo/Plate1.jpg", frame)
@@ -342,7 +342,7 @@ def main():
             break
         cv2_im_cropped = frame[380:1010,:] #384/630 (0.6), 384/1920 (0.2) *Orig* 190:504,235:1300 This is a global variable and shall never be altered, so cv2_im_cropped is never augmented after this point
                                                 #370(1.04) * 1235 (0.31)   Pump8
-        cv2_im_cropped = cv2.cvtColor(cv2_im_cropped, cv2.COLOR_RGB2BGR)
+        #cv2_im_rgb = cv2.cvtColor(cv2_im_cropped, cv2.COLOR_RGB2BGR)
         cv2_im_rgb = cv2.resize(cv2_im_cropped, inference_size)
         run_inference(interpreter, cv2_im_rgb.tobytes())
         objs = get_objects(interpreter, args.threshold)[:args.top_k]
@@ -351,7 +351,7 @@ def main():
             buf_list = []
             plate_list = {}
             for i in objs:
-                if i[0] in filtered and i[2][3] >= 450 and i[2][3] <=620:    
+                if i[0] in filtered and i[2][3] >= 260 and i[2][3] <=370:    
                     ll = list(i[2]) # Declare a list and append the bounding box x1y1x2y2
                     #print("Car center,", i[2])
                     ll.append(i[1]) # Append the score
@@ -384,7 +384,7 @@ def main():
             # If 
             side = None
             if i[4] not in tracks_status.keys():
-                if i[:4][2] > 180:
+                if i[:4][2] > 190:
                     side = "A"
                 else:
                     side = "B"
